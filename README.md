@@ -19,7 +19,7 @@ Next, you *should* change the `authors` list at the top of the `module.json.in` 
     {
       "name": "Wesley Griffin"
     }
-  ],
+  ]
 ```
 
 If you want, you can freely change the `title` and `description`.

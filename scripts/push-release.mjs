@@ -13,14 +13,20 @@ const version_parts = module.version.split('.').map(Number);
 version_parts[1] += 1;
 module.version = version_parts.join('.');
 
+// We first need to write module.json.in so it is updated for the next release
+await fs.writeFile(`module.json.in`, JSON.stringify(module, null, 2));
+
 // Update the module urls
 module.url = url;
 module.manifest = `https://raw.githubusercontent.com${url.pathname}/refs/heads/main/module.json`;
 module.download = `${url}/archive/v${module.version}.zip`;
 
-// Write and commit module.json
-await fs.writeFile(`module.json`, JSON.stringify(module));
-execSync('git add .');
+// Write and commit module.json and module.json.in
+await fs.writeFile(`module.json`, JSON.stringify(module, null, 2));
+execSync('git add module.json');
+execSync('git add module.json.in');
 execSync(`git commit -m \"Creating release v${module.version}\"`);
+execSync(`git tag v${module.version}`);
+execSync('git push --tags origin main');
 
 console.log(`Foundry manifest link: ${module.manifest}`);

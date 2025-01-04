@@ -34,6 +34,9 @@ TODO. Ideally this will parse markdown files and update the json files.
 
 ## Creating a release
 
+Before making a release, you will need to create a Github personal access token.
+
+
 Once you have made your changes to the journal entries, you can create a release like so:
 ```shell
 $ npm run push-release

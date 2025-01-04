@@ -29,4 +29,6 @@ execSync(`git commit -m \"Creating release v${module.version}\"`);
 execSync(`git tag v${module.version}`);
 execSync('git push --tags origin main');
 
+// Use the Github API to create a new release
+
 console.log(`Foundry manifest link: ${module.manifest}`);

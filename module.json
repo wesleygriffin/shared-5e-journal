@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "download": "https://github.com/wesleygriffin/shared-5e-journal/archive/v1.0.0.zip",
+  "url": "https://github.com/wesleygriffin/shared-5e-journal",
+  "manifest": "https://raw.githubusercontent.com/wesleygriffin/shared-5e-journal/refs/heads/main/module.json",
+  "bugs": "https://github.com/wesleygriffin/shared-5e-journal/-/issues",
+  "authors": [
+    {
+      "name": "Wesley Griffin"
+    }
+  ],
+  "id": "shared-5e-journal",
+  "title": "Shared D&D 5e Journal",
+  "description": "Shared world-agnostic D&D 5e Journal for Foundry VTT",
+  "compatibility": {
+    "minimum": 11,
+    "verified": 12
+  },
+  "packs": [
+    {
+      "name": "journal",
+      "label": "Journal",
+      "module": "shared-5e-journal",
+      "path": "packs/journal",
+      "system": "dnd5e",
+      "type": "JournalEntry",
+      "private": false,
+      "flags": {}
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Shared D&D 5e Journal",
+      "sorting": "m",
+      "color": "#3018e2",
+      "packs": [
+        "journal"
+      ]
+    }
+  ]
+}

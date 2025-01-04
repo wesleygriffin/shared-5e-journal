@@ -1,0 +1,38 @@
+name: on-push
+on: push
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Pack
+        run: |
+          npm ci
+          npm run pack-compendium
+          zip -r ${{ github.ref_name }}.zip packs module.json README.md LICENSE.txt
+      - name: Upload
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive
+          path: ${{ github.ref_name }}.zip
+          retention-days: 10
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: archive
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ github.ref_name }}.zip
+          make_latest: "true"

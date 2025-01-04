@@ -1,0 +1,29 @@
+{
+  "name": "Placeholder Entry",
+  "_id": "TbjddPcMo4i15w8e",
+  "pages": [
+    {
+      "sort": 100000,
+      "name": "Placeholder Page 1",
+      "type": "text",
+      "_id": "cSZMy3aijcPWm86c",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a text page. It links to @UUID[.bV2X3qgUl62Ssz5V]{Placeholder Page 2}</p>"
+      },
+      "_key": "!journal.pages!TbjddPcMo4i15w8e.cSZMy3aijcPWm86c"
+    },
+    {
+      "sort": 200000,
+      "name": "Placeholder Page 2",
+      "type": "text",
+      "_id": "bV2X3qgUl62Ssz5V",
+      "text": {
+        "format": 1,
+        "content": "<p>This is a second text page.</p>"
+      },
+      "_key": "!journal.pages!TbjddPcMo4i15w8e.bV2X3qgUl62Ssz5V"
+    }
+  ],
+  "_key": "!journal!TbjddPcMo4i15w8e"
+}

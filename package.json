@@ -3,11 +3,11 @@
   "name": "shared-5e-journal",
   "description": "Shared world-agnostic D&D 5e Journal for Foundry VTT",
   "scripts": {
+    "push-release": "node scripts/push-release.mjs",
     "pack-compendium": "node scripts/pack-compendium.mjs",
     "unpack-compendium": "node scripts/unpack-compendium.mjs"
   },
   "devDependencies": {
-    "minimist": "^1.2.8",
     "@foundryvtt/foundryvtt-cli": "^1.0.3"
   },
   "license": "CC0-1.0"

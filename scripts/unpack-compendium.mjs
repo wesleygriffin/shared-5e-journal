@@ -5,36 +5,45 @@ import path from 'path';
 const MODULE_ID = process.cwd();
 const IGNORE = [ '.gitattributes', '.DS_Store' ];
 
-const packs = await fs.readdir(`${MODULE_ID}/packs`);
-for (const pack of packs) {
-    if (IGNORE.includes(pack)) {
-        continue;
-    }
+fs.readdir(`${MODULE_ID}/packs`)
+    .then(packs => {
+        for (const pack of packs) {
+            if (IGNORE.includes(pack)) {
+                continue;
+            }
 
-    console.log(`Unpacking ${pack}`);
-    const directory = `${MODULE_ID}/src/packs/${pack}`;
+            console.log(`Unpacking ${pack}`);
+            const directory = `${MODULE_ID}/src/packs/${pack}`;
 
-    try {
-        // Delete all the pack files in the source directory.
-        for (const file of await fs.readdir(directory)) {
-            await fs.unlink(path.join(directory, file));
-        }
-    } catch (error) {
-        if (error.code === 'ENOENT') {
-            console.error(`No files inside of ${pack}`);
-        } else {
-            console.error(error);
-        }
-    }
+            // Delete all the pack files in the source directory.
+            fs.readdir(directory)
+                .then(files => {
+                    for (const file of files) {
+                        fs.unlink(path.join(directory, file))
+                            .catch(err => {
+                                if (err.code === 'ENOENT') {
+                                    console.log(`No files inside of ${pack}`);
+                                }
+                            });
+                    }
+                })
+                .catch(err => {
+                    if (err.code === 'ENOENT') {
+                        console.log(`No files inside of ${pack}`);
+                    }
+                });
 
-    await extractPack(
-        `${MODULE_ID}/packs/${pack}`,
-        `${MODULE_ID}/src/packs/${pack}`,
-        {
-            transformName: transformName,
+            extractPack(
+                `${MODULE_ID}/packs/${pack}`,
+                `${MODULE_ID}/src/packs/${pack}`,
+                {
+                    transformName: transformName,
+                })
+                .catch(err => {
+                    console.log(`Error extracting ${pack}: ${err}`);
+                });
         }
-    );
-}
+    });
 
 /**
  * Prefaces the document with its type

@@ -7,9 +7,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Initialize
+        run: npm ci
+      - name: Update
+        if: startsWith(github.ref, 'refs/tags/')
+        run: npm run update-module --tag-name ${{ github.ref_name }}
       - name: Pack
         run: |
-          npm ci
           npm run pack-compendium
           zip -r ${{ github.ref_name }}.zip packs module.json README.md LICENSE.txt
       - name: Upload

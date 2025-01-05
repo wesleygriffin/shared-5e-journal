@@ -2,3 +2,4 @@
 /packs/
 /.idea/
 .DS_Store
+.env

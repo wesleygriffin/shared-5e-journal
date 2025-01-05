@@ -23,6 +23,8 @@ fs.readdir(`${MODULE_ID}/packs`)
                             .catch(err => {
                                 if (err.code === 'ENOENT') {
                                     console.log(`No files inside of ${pack}`);
+                                } else {
+                                    throw err;
                                 }
                             });
                     }
@@ -30,6 +32,8 @@ fs.readdir(`${MODULE_ID}/packs`)
                 .catch(err => {
                     if (err.code === 'ENOENT') {
                         console.log(`No files inside of ${pack}`);
+                    } else {
+                        throw err;
                     }
                 });
 

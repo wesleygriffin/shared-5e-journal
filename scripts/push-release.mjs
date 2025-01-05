@@ -1,11 +1,22 @@
+import archiver from 'archiver';
+import axios from 'axios';
+import { createWriteStream } from 'fs';
 import { execSync } from 'child_process';
 import { promises as fs } from 'fs';
 import minimist from '@minimistjs/minimist';
+
+const MODULE_ID = process.cwd();
 
 const argv = minimist(process.argv.slice(2), {boolean: [ 'dry-run' ], default: {'dry-run': false}});
 if (argv['dry-run']) {
     console.log('Dry-run specified, no changes will be made');
 }
+
+const instance = axios.create({
+    baseURL: 'https://api.github.com/',
+    timeout: 1000,
+    headers: {'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2022-11-28'},
+});
 
 // Get the repository url for updating the module.json
 const repo_url = execSync('git remote get-url origin').toString().trim();
@@ -39,14 +50,42 @@ if (argv['dry-run']) {
     console.log(`would write "module.download: ${module.download}" to module.json`);
     console.log(`would run "git add module.json module.json.in"`);
     console.log(`would run "git commit -m \"Creating release v${module.version}\"`);
-    console.log(`would run "git tag v${module.version}"`);
-    console.log(`would run "git push --tags origin main"`);
+    console.log(`would run "git push origin main"`);
 } else {
     await fs.writeFile(`module.json`, JSON.stringify(module, null, 2));
     execSync('git add module.json module.json.in');
     execSync(`git commit -m \"Creating release v${module.version}\"`);
-    execSync(`git tag v${module.version}`);
-    execSync('git push --tags origin main');
+    execSync('git push origin main');
+}
+
+// Create the release asset zip file
+const filename = `${MODULE_ID}/v${module.version}.zip`;
+if (argv['dry-run']) {
+    console.log(`would write ${filename}`);
+} else {
+    const output = createWriteStream(filename);
+    const archive = archiver('zip', {
+        zlib: {level: 9} // Sets the compression level.
+    });
+    archive.pipe(output);
+
+    archive.on('warning', function (err) {
+        if (err.code === 'ENOENT') {
+            console.error(err.message);
+        } else {
+            throw err;
+        }
+    });
+    archive.on('error', function (err) {
+        throw err;
+    });
+    output.on('close', function () {
+        console.log(`wrote ${filename}: ${archive.pointer()} total bytes`)
+    });
+
+    archive.append(`${MODULE_ID}/module.json`, {name: 'module.json'});
+    archive.directory(`${MODULE_ID}/packs`, 'packs');
+    await archive.finalize()
 }
 
 // Use the GitHub API to create a new release

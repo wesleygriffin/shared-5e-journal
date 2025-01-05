@@ -9,6 +9,8 @@
     "unpack-compendium": "node scripts/unpack-compendium.mjs"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
+    "axios": "^1.7.9",
     "@dotenvx/dotenvx": "^1.32.0",
     "@foundryvtt/foundryvtt-cli": "^1.0.3",
     "@minimistjs/minimist": "^1.2.6"

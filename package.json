@@ -3,13 +3,15 @@
   "name": "shared-5e-journal",
   "description": "Shared world-agnostic D&D 5e Journal for Foundry VTT",
   "scripts": {
-    "push-release": "dotenvx run -- scripts/push-release.mjs",
+    "push-release": "dotenvx run -- node scripts/push-release.mjs",
+    "push-release-dry-run": "dotenvx run -- node scripts/push-release.mjs --dry-run",
     "pack-compendium": "node scripts/pack-compendium.mjs",
     "unpack-compendium": "node scripts/unpack-compendium.mjs"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.32.0",
     "@foundryvtt/foundryvtt-cli": "^1.0.3",
-    "@dotenvx/dotenvx": "^1.32.0"
+    "@minimistjs/minimist": "^1.2.6"
   },
   "license": "CC0-1.0"
 }

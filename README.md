@@ -10,7 +10,7 @@ be changed to point to your repository before it can be used.
 First, either fork this repository or clone it and then push it to a new 
 repository you control.
 
-**NOTE:** The release script mentioned below will currently only work with Github hosted repositories.
+**NOTE:** The release script mentioned below will currently only work with GitHub hosted repositories.
 
 Next, you *should* change the `authors` list at the top of the `module.json.in` file:
 ```json
@@ -20,6 +20,7 @@ Next, you *should* change the `authors` list at the top of the `module.json.in` 
       "name": "Wesley Griffin"
     }
   ]
+}
 ```
 
 If you want, you can freely change the `title` and `description`.
@@ -34,7 +35,7 @@ TODO. Ideally this will parse markdown files and update the json files.
 
 ## Creating a release
 
-Before making a release, you will need to create a Github personal access token.
+Before making a release, you will need to create a GitHub personal access token.
 
 
 Once you have made your changes to the journal entries, you can create a release like so:

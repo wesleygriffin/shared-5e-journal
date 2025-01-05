@@ -12,12 +12,6 @@ if (argv['dry-run']) {
     console.log('Dry-run specified, no changes will be made');
 }
 
-const instance = axios.create({
-    baseURL: 'https://api.github.com/',
-    timeout: 1000,
-    headers: {'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 'X-GitHub-Api-Version': '2022-11-28'},
-});
-
 // Get the repository url for updating the module.json
 const repo_url = execSync('git remote get-url origin').toString().trim();
 const url = new URL(repo_url.substring(0, repo_url.length - 4));
@@ -80,14 +74,46 @@ if (argv['dry-run']) {
         throw err;
     });
     output.on('close', function () {
-        console.log(`wrote ${filename}: ${archive.pointer()} total bytes`)
+        console.log(`wrote ${filename}: ${archive.pointer()} total bytes`);
     });
 
     archive.append(`${MODULE_ID}/module.json`, {name: 'module.json'});
     archive.directory(`${MODULE_ID}/packs`, 'packs');
-    await archive.finalize()
+    await archive.finalize();
 }
 
 // Use the GitHub API to create a new release
+const github = axios.create({
+    baseURL: 'https://api.github.com',
+    timeout: 1000,
+    headers: {
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+    },
+});
+
+const path_parts = url.pathname.split('/');
+const owner = path_parts[1];
+const repo = path_parts[2];
+
+if (argv['dry-run']) {
+    console.log(`would POST {'tag_name: 'v${module.version}'} to ${github.getUri()}/repos/${owner}/${repo}/releases`);
+} else {
+    try {
+        const create_resp = await github.post(`/repos/${owner}/${repo}/releases`, {
+            tag_name: `v${module.version}`
+        })
+        console.log(create_resp);
+
+        const list_resp = await github.get(`/repos/${owner}/${repo}/releases`);
+        console.log(list_resp);
+
+        const upload_resp = await github.post(`/repos/${owner}/${repo}/releases/${id}/assets`, {})
+        console.log(upload_resp);
+    } catch (err) {
+        console.error(`Cannot create release: $(err)`);
+    }
+}
 
 console.log(`Foundry manifest link: ${module.manifest}`);

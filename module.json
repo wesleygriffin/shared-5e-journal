@@ -33,8 +33,8 @@
     "minimum": 11,
     "verified": 12
   },
-  "version": "0.10.0",
+  "version": "0.11.0",
   "url": "https://github.com/wesleygriffin/shared-5e-journal",
   "manifest": "https://raw.githubusercontent.com/wesleygriffin/shared-5e-journal/refs/heads/main/module.json",
-  "download": "https://github.com/wesleygriffin/shared-5e-journal/archive/v0.10.0.zip"
+  "download": "https://github.com/wesleygriffin/shared-5e-journal/archive/v0.11.0.zip"
 }
